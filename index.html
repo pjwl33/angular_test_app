@@ -3,11 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" text="text/css">
-  <title>Angular App</title>
+  <link rel="stylesheet" href="style.css" text="text/css">
+  <title>Angular.js App</title>
 </head>
-<body>
+<h1>MY GEM STORE</h1>
+<body ng-controller="StoreController as store">
+  <div ng-repeat="product in store.products | orderBy:'-price'" class="list-group-item">
+    <h1 product-name></h1>
+    <div ng-show="product.images.length" ng-repeat="image in product.images" class="clearfix">
+      <img ng-src="{{image.thumb}}">
+    </div>
+    <h2 product-price></h2>
+    <button ng-show="product.canPurchase"> Add to Cart </button>
+
+    <section ng-controller="PanelController as panel">
+      <ul class="nav nav-pills">
+        <li ng-class="{active:panel.isSelected(1)}">
+          <a ng-click="panel.selectTab(1)" href="">Description</a>
+        </li>
+        <li ng-class="{active:panel.isSelected(2)}">
+          <a ng-click="panel.selectTab(2)" href="">Specifications</a>
+        </li>
+        <li ng-class="{active:panel.isSelected(3)}">
+          <a ng-click="panel.selectTab(3)" href="">Reviews</a>
+        </li>
+      </ul>
+      <div class="panel" ng-show="panel.isSelected(1)">
+        <h4>Description</h4>
+        <blockquote>"{{product.description}}"</blockquote>
+      </div>
+      <div class="panel" ng-show="panel.isSelected(2)">
+        <h4>Shine</h4>
+        <blockquote>Shine: {{product.shine}}</blockquote>
+      </div>
+      <div class="panel" ng-show="panel.isSelected(3)">
+
+        <h4>Reviews</h4>
+        <blockquote ng-repeat="review in product.reviews">
+          <div>
+            <b>{{review.stars}} Stars: </b>
+            {{review.body}}
+            <cite>-by: {{review.author}} on {{review.createdOn | date:'MM/dd/yyyy @ h:mma'}}</cite>
+          </div>
+        </blockquote>
+
+        <form role="form" name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewForm.$valid && reviewCtrl.addReview(product)" novalidate>
+          <blockquote>
+            <b>{{reviewCtrl.review.stars}} Stars: </b>
+            {{reviewCtrl.review.body}}
+            <cite>-by: {{reviewCtrl.review.author}} on {{reviewCtrl.review.createdOn | date:'MM/dd/yyyy @ h:mma'}}</cite>
+          </blockquote>
+
+          <div class="form-group">
+            <label>Stars: </label>
+            <select class="form-control" ng-model="reviewCtrl.review.stars" required>
+              <option value="1">1 star</option>
+              <option value="2">2 stars</option>
+              <option value="3">3 stars</option>
+              <option value="4">4 stars</option>
+              <option value="5">5 stars</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Review: </label> <br>
+            <textarea class="form-control" ng-model="reviewCtrl.review.body" placeholder="Write a short review here" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>by:</label>
+            <input class="form-control" ng-model="reviewCtrl.review.author" type="email" placeholder="jon@example.com" required>
+          </div>
+          <div>reviewForm is {{reviewForm.$valid}}</div>
+          <input type="submit" value="Add Review">
+        </form>
+
+      </div>
+    </section>
+  </div>
+
   <script type="text/javascript" src="angular.min.js"></script>
   <script type="text/javascript" src="app.js"></script>
-  <p>{{"hello" + " you"}}</p>
 </body>
 </html>

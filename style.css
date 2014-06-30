@@ -1,0 +1,9 @@
+body {
+  max-width: 80%;
+  margin: 0 auto;
+}
+li { margin: 1.25em 1em; }
+
+.ng-invalid.ng-dirty { border-color: red; }
+.ng-valid.ng-dirty { border-color: #78fa89; }
+
